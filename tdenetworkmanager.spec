@@ -10,16 +10,7 @@
 
 %define tde_pkg tdenetworkmanager
 %define tde_prefix /opt/trinity
-%define tde_bindir %{tde_prefix}/bin
-%define tde_datadir %{tde_prefix}/share
-%define tde_docdir %{tde_datadir}/doc
-%define tde_includedir %{tde_prefix}/include
-%define tde_libdir %{tde_prefix}/%{_lib}
-%define tde_mandir %{tde_datadir}/man
-%define tde_tdeappdir %{tde_datadir}/applications/tde
-%define tde_tdedocdir %{tde_docdir}/tde
-%define tde_tdeincludedir %{tde_includedir}/tde
-%define tde_tdelibdir %{tde_libdir}/trinity
+
 
 %undefine __brp_remove_la_files
 %define dont_remove_libtool_files 1
@@ -41,25 +32,16 @@ URL:		http://www.trinitydesktop.org/
 
 License:	GPLv2+
 
-#Vendor:		Trinity Desktop
-#Packager:	Francois Andriot <francois.andriot@free.fr>
-
-Prefix:		%{tde_prefix}
 
 Source0:		https://mirror.ppa.trinitydesktop.org/trinity/releases/R%{tde_version}/main/applications/settings/%{tarball_name}-%{tde_version}%{?preversion:~%{preversion}}.tar.xz
 Source1:		%{name}-rpmlintrc
 
 BuildSystem:    cmake
+
 BuildOption:    -DCMAKE_BUILD_TYPE="RelWithDebInfo"
-BuildOption:    -DCMAKE_SKIP_RPATH=OFF
-BuildOption:    -DCMAKE_SKIP_INSTALL_RPATH=OFF
-BuildOption:    -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
-BuildOption:    -DCMAKE_INSTALL_RPATH="%{tde_libdir}"
 BuildOption:    -DCMAKE_INSTALL_PREFIX=%{tde_prefix}
-BuildOption:    -DBIN_INSTALL_DIR=%{tde_bindir}
-BuildOption:    -DINCLUDE_INSTALL_DIR=%{tde_tdeincludedir}
-BuildOption:    -DLIB_INSTALL_DIR=%{tde_libdir}
-BuildOption:    -DSHARE_INSTALL_PREFIX=%{tde_datadir}
+BuildOption:    -DINCLUDE_INSTALL_DIR=%{tde_prefix}/include/tde
+BuildOption:    -DSHARE_INSTALL_PREFIX=%{tde_prefix}/share
 
 BuildRequires:	trinity-tdelibs-devel >= %{tde_version}
 BuildRequires:	trinity-tdebase-devel >= %{tde_version}
@@ -122,16 +104,16 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%{tde_bindir}/tdenetworkmanager
-%{tde_libdir}/*.la
-%{tde_libdir}/*.so
+%{tde_prefix}/bin/tdenetworkmanager
+%{tde_prefix}/%{_lib}/*.la
+%{tde_prefix}/%{_lib}/*.so
 %{_sysconfdir}/dbus-1/system.d/tdenetworkmanager.conf
-%{tde_tdeappdir}/tdenetworkmanager.desktop
-%{tde_datadir}/apps/tdenetworkmanager
-%{tde_datadir}/icons/hicolor/*/apps/tdenetworkmanager*
-%{tde_datadir}/servicetypes/tdenetworkmanager_plugin.desktop
-%{tde_datadir}/servicetypes/tdenetworkmanager_vpnplugin.desktop
-%{tde_datadir}/autostart/tdenetworkmanager.desktop
+%{tde_prefix}/share/applications/tde/tdenetworkmanager.desktop
+%{tde_prefix}/share/apps/tdenetworkmanager
+%{tde_prefix}/share/icons/hicolor/*/apps/tdenetworkmanager*
+%{tde_prefix}/share/servicetypes/tdenetworkmanager_plugin.desktop
+%{tde_prefix}/share/servicetypes/tdenetworkmanager_vpnplugin.desktop
+%{tde_prefix}/share/autostart/tdenetworkmanager.desktop
 #{tde_datadir}/services/tdenetman_openvpn.desktop
 #{tde_datadir}/services/tdenetman_pptp.desktop
 #{tde_datadir}/services/tdenetman_strongswan.desktop
@@ -150,15 +132,15 @@ Development headers for tdenetworkmanager
 
 %files devel
 %defattr(-,root,root,-)
-%{tde_tdeincludedir}/*.h
-%{tde_tdelibdir}/*.la
-%{tde_tdelibdir}/*.so
+%{tde_prefix}/include/tde/*.h
+%{tde_prefix}/%{_lib}/trinity/*.la
+%{tde_prefix}/%{_lib}/trinity/*.so
 
 ##########
 
 
 %conf -p
 unset QTDIR QTINC QTLIB
-export PATH="%{tde_bindir}:${PATH}"
-export PKG_CONFIG_PATH="%{tde_libdir}/pkgconfig"
+export PATH="%{tde_prefix}/bin:${PATH}"
+export PKG_CONFIG_PATH="%{tde_prefix}/%{_lib}/pkgconfig"
 
