@@ -65,8 +65,8 @@ Requires:		NetworkManager
 BuildRequires:  pkgconfig(libacl)
 
 # DBUS support
-BuildRequires:	trinity-dbus-1-tqt-devel >= 1:0.9
-BuildRequires:	trinity-dbus-tqt-devel >= 1:0.63
+BuildRequires:	pkgconfig(dbus-1-tqt)
+BuildRequires:	pkgconfig(dbus-tqt)
 
 
 # UDEV support
