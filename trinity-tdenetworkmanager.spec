@@ -2,10 +2,6 @@
 %bcond gamin 1
 
 # TDE variables
-%if "%{?tde_version}" == ""
-%define tde_version 14.1.5
-%endif
-
 %define tde_pkg tdenetworkmanager
 %define tde_prefix /opt/trinity
 
@@ -15,14 +11,14 @@
 %define _disable_rebuild_configure 1
 
 # fixes error: Empty %files file …/debugsourcefiles.list
-%define _debugsource_template %{nil}
+%undefine _debugsource_template
 
 %define tarball_name %{tde_pkg}-trinity
 
 
 Name:		trinity-%{tde_pkg}
-Version:	0.9
-Release:	%{?tde_version:%{tde_version}_}3
+Version:	14.1.6
+Release:	1
 Summary:	Trinity applet for Network Manager
 Group:		Applications/Internet
 URL:		http://www.trinitydesktop.org/
@@ -30,7 +26,7 @@ URL:		http://www.trinitydesktop.org/
 License:	GPLv2+
 
 
-Source0:		https://mirror.ppa.trinitydesktop.org/trinity/releases/R%{tde_version}/main/applications/settings/%{tarball_name}-%{tde_version}.tar.xz
+Source0:		https://mirror.ppa.trinitydesktop.org/trinity/releases/R%{version}/main/applications/settings/%{tarball_name}-%{version}.tar.xz
 Source1:		%{name}-rpmlintrc
 
 BuildSystem:    cmake
@@ -40,12 +36,13 @@ BuildOption:    -DCMAKE_INSTALL_PREFIX=%{tde_prefix}
 BuildOption:    -DINCLUDE_INSTALL_DIR=%{tde_prefix}/include/tde
 BuildOption:    -DSHARE_INSTALL_PREFIX=%{tde_prefix}/share
 
-BuildRequires:	trinity-tdelibs-devel >= %{tde_version}
-BuildRequires:	trinity-tdebase-devel >= %{tde_version}
+BuildRequires:	trinity-tdelibs-devel >= %{version}
+BuildRequires:	trinity-tdebase-devel >= %{version}
+BuildRequires:	trinity-tde-cmake >= %{version}
+
 BuildRequires:	desktop-file-utils
 BuildRequires:	gettext
 
-BuildRequires:	trinity-tde-cmake >= %{tde_version}
 BuildRequires: libtool
 
 %{!?with_clang:BuildRequires:	gcc-c++}
@@ -53,8 +50,8 @@ BuildRequires: libtool
 BuildRequires:	pkgconfig
 BuildRequires:	fdupes
 
-Obsoletes:		trinity-knetworkmanager < %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:		trinity-knetworkmanager = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:		trinity-knetworkmanager < %{EVRD}
+Provides:		trinity-knetworkmanager = %{EVRD}
 
 # NETWORKMANAGER support
 BuildRequires:  pkgconfig(libnm)
@@ -122,7 +119,7 @@ fi
 %package devel
 Summary:		Common data shared among the MySQL GUI Suites
 Group:			Development/Libraries
-Requires:		%{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:		%{name} = %{EVRD}
 
 %description devel
 Development headers for tdenetworkmanager
